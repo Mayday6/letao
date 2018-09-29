@@ -20,28 +20,33 @@
         <span class="title">注册</span>
     </header>
     <div class="cz_container">
-        <div class="form_box">
-            <div class="mui-input-row">
-                <input name="mobile" type="text" placeholder="手机号">
+        <form action="">
+            <div class="form_box">
+                <div class="mui-input-row">
+                    <input name="username" type="text" placeholder="用户名">
+                </div>
+                <div class="mui-input-row">
+                    <input name="mobile" class="mobile" type="text" placeholder="手机号">
+                </div>
+                <div class="mui-input-row">
+                    <input name="password" type="password" placeholder="密码" class="mui-input-password">
+                    <span class="mui-icon mui-icon-eye"></span>
+                </div>
+                <div class="mui-input-row">
+                    <input name="rePass" type="password" placeholder="确认密码" class="mui-input-password">
+                    <span class="mui-icon mui-icon-eye"></span>
+                </div>
+                <div class="mui-input-row">
+                    <input name="vCode" type="text" placeholder="认证码">
+                    <a href="javascript:;" class="btn_getCode mui-btn mui-btn-primary" >获取认证码</a>
+                </div>
+                <button type="submit" class="mui-btn mui-btn-primary btn_login">注册<button>
+                <div class="mui-input-row cz_text">
+                    <input type="checkbox" checked/> 我同意《会员服务协议》
+                    <a href="login.html">立即登录</a>
+                </div>
             </div>
-            <div class="mui-input-row">
-                <input name="pass" type="password" placeholder="密码" class="mui-input-password">
-                <span class="mui-icon mui-icon-eye"></span>
-            </div>
-            <div class="mui-input-row">
-                <input name="rePass" type="password" placeholder="确认密码" class="mui-input-password">
-                <span class="mui-icon mui-icon-eye"></span>
-            </div>
-            <div class="mui-input-row">
-                <input name="code" type="text" placeholder="认证码">
-                <a href="javascript:;" class="btn_getCode mui-btn mui-btn-primary" >获取认证码</a>
-            </div>
-            <a href="index.html" class="mui-btn mui-btn-primary btn_login">注册</a>
-            <div class="mui-input-row cz_text">
-                <input type="checkbox" checked/> 我同意《会员服务协议》
-                <a href="login.html">立即登录</a>
-            </div>
-        </div>
+        </form>
     </div>
     <footer class="cz_tabs">
         <a class="tab_home fa fa-home" href="../index.html"><span>首页</span></a>
@@ -51,5 +56,49 @@
     </footer>
 </div>
 <script src="../res/mui/js/mui.min.js"></script>
+<script src="../js/jquery.min.js"></script>
+<script>
+    //获取验证码
+    $('.btn_getCode').on('click', function() {
+        //根据手机号码获取 先获取手机号
+        var mobile = $('.mobile').val();
+        //判断手机号是否输入 或者格式 可以根据正则来判断手机号的格式是否正确
+        if(mobile == '') return alert('请输入正确的手机号码');
+        //发送ajax请求
+        $.ajax({
+            url: '/api/user/vCode',
+            type: 'get',
+            data: {
+                mobile: mobile
+            },
+            success: function(msg) {
+            
+            }
+        })
+    })
+//点击注册的时候提交表单的信息，根据类名获取到注册按钮
+//点击事件相当于表单的提交事件根据表单，获取到他提交的内容
+$('form').on('submit', function() {
+    var data = $(this).serialize();  //序列化表单 输出标准的查询字符串
+    //发送ajax请求
+    //修改了类名要看他的样式是否改变
+    $.ajax({
+        url:'/api/user/register',
+        type: 'post',
+        data : data,
+        success: function(msg) {
+            if(msg.success) {
+                    location.href = './login.html';
+                }
+            }
+    })
+
+    //阻止表单的默认提交
+    return false;
+})
+
+
+
+</script>
 </body>
 </html>

@@ -46,7 +46,17 @@
 <script>
 $('.btn_login').on('click', function() {
     $.ajax({
-        
+        url: '/api/user/login',
+        type: 'post',
+        data:{
+            username: $('input[name="name"]').val(),
+            password: $('input[name="pass"]').val()
+        },
+        success: function(msg) {
+            if(msg.success) {
+                location.href = './index.html'
+            }
+        }
     })
 
 
